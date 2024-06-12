@@ -160,14 +160,7 @@ def two_FA_broken_logic(url):
 def Broken_Authentication():
 
     while True:
-        print("\n")
-        username = input("Enter the path for wordlist username list ")
-        password = input("Enter the path for wordlist password list ")
-        with open(username) as fb:
-            usernames = fb.read().splitlines()
 
-        with open(password) as fb:
-            passwords = fb.read().splitlines()
         print("\n")
         print("Options:")
         print("\n")
@@ -183,6 +176,15 @@ def Broken_Authentication():
         print("\n")
         option = int(input("Select an option: "))
         print("\n")
+        if option ==9:
+            break
+        username = input("Enter the path for wordlist username list ")
+        password = input("Enter the path for wordlist password list ")
+        with open(username) as fb:
+            usernames = fb.read().splitlines()
+
+        with open(password) as fb:
+            passwords = fb.read().splitlines()
         url = input("Enter a URL: ")
         print("\n")
         if option == 1:
@@ -216,4 +218,3 @@ def main():
             break
 if __name__ == "__main__":
     main()
-#https://0a0300ff041ad69c85a41ce500f8000c.web-security-academy.net/login
