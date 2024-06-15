@@ -243,7 +243,7 @@ def SQL_injection():
         print("\n")
         option = int(input("Select an option: "))
         print("\n")
-        if option ==9:
+        if option == 9:
             break
         elif option == 1:
             url = input("Enter a URL: ")
