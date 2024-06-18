@@ -176,9 +176,7 @@ def two_FA_broken_logic(url):
             print(i)
             break
 def Broken_Authentication():
-
     while True:
-
         print("\n")
         print("Options:")
         print("\n")
@@ -223,6 +221,7 @@ def Broken_Authentication():
             two_FA_broken_logic(url)
         else:
             break
+            
 def replaceNth(s, source, target, n) :
     inds = [i for i in range(len(s)-len(source)+1) if s[i:i+len(source)]==source]
     if len (inds)< n:
@@ -270,7 +269,6 @@ def SQl_injection_retrieval_of_hidden_data(url):
 
 def SQL_injection():
     while True:
-
         print("\n")
         print("Options:")
         print("\n")
